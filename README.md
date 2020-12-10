@@ -2,8 +2,9 @@
 
 Log to Splunk
 
-![Build Status](https://github.com/kunyan/log2splunk/workflows/Build/badge.svg)
+[![Build Status](https://github.com/kunyan/log2splunk/workflows/Build/badge.svg)](https://github.com/kunyan/log2splunk/actions)
 [![codecov](https://codecov.io/gh/kunyan/log2splunk/branch/main/graph/badge.svg?token=KFDF83NVCR)](https://codecov.io/gh/kunyan/log2splunk)
+[![npm version](https://img.shields.io/npm/v/log2splunk)](https://www.npmjs.com/package/log2splunk)
 
 ### Usage
 
