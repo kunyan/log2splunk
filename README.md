@@ -2,7 +2,7 @@
 
 Log to Splunk
 
-![Build](https://github.com/kunyan/log4splunk/workflows/node.js/badge.svg)
+![Build Status](https://github.com/kunyan/log2splunk/workflows/Build/badge.svg)
 
 ### Usage
 
