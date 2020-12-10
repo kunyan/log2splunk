@@ -3,6 +3,7 @@
 Log to Splunk
 
 ![Build Status](https://github.com/kunyan/log2splunk/workflows/Build/badge.svg)
+[![codecov](https://codecov.io/gh/kunyan/log2splunk/branch/main/graph/badge.svg?token=KFDF83NVCR)](https://codecov.io/gh/kunyan/log2splunk)
 
 ### Usage
 
