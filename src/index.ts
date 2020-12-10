@@ -1,6 +1,6 @@
-import got, { Response, OptionsOfJSONResponseBody } from 'got';
+import got, { Response, HTTPSOptions, ExtendOptions } from 'got';
 
-interface ILog2SplunkOptions {
+export interface ILog2SplunkOptions {
   token?: string;
   protocol: string;
   host: string;
@@ -8,9 +8,10 @@ interface ILog2SplunkOptions {
   path: string;
   source?: string;
   index?: string;
+  https?: HTTPSOptions;
 }
 
-interface IMetaData {
+export interface IMetaData {
   time?: number;
   host?: string;
   source?: string;
@@ -33,10 +34,9 @@ const defaultOptions: ILog2SplunkOptions = {
 export default class Log2Splunk {
   private client;
   private metaData: IMetaData;
-  private index?: string;
 
   constructor(options: Partial<ILog2SplunkOptions> = defaultOptions) {
-    const { protocol, host, port, path, token, source, index } = {
+    const { protocol, host, port, path, token, https, source, index } = {
       ...defaultOptions,
       ...options,
     };
@@ -46,7 +46,7 @@ export default class Log2Splunk {
       index,
     };
 
-    this.client = got.extend({
+    const opt: ExtendOptions = {
       url: `${protocol}://${host}:${port}${path}`,
       context: {
         token,
@@ -66,7 +66,13 @@ export default class Log2Splunk {
           },
         ],
       },
-    });
+    };
+
+    if (https) {
+      opt.https = https;
+    }
+
+    this.client = got.extend(opt);
   }
 
   private getPayload(

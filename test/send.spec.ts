@@ -8,6 +8,9 @@ describe('send', () => {
     const logger = new Log2Splunk({
       host: 'splunk-hec.example.com',
       token: 'aaaa',
+      https: {
+        rejectUnauthorized: true,
+      },
     });
 
     let reqBody;
