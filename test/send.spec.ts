@@ -98,7 +98,6 @@ describe('send', () => {
     await logger.send('Hello Error').catch((err: Error) => {
       expect(err).to.be.an('error');
       expect(err.message).to.eq('Token required');
-      // console.log(err);
     });
   });
 });

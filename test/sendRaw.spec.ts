@@ -17,7 +17,7 @@ describe('sendRaw', () => {
         authorization: 'Splunk aaaa',
       },
     })
-      .post('/services/collector/event', (body) => (reqBody = body))
+      .post('/services/collector/raw', (body) => (reqBody = body))
       .reply(200, { text: 'Success', code: 0 });
 
     const result = await logger.sendRaw('Hello world');

@@ -2,10 +2,10 @@ import got, { Response, HTTPSOptions, ExtendOptions } from 'got';
 
 export interface ILog2SplunkOptions {
   token?: string;
-  protocol: string;
-  host: string;
-  port: number;
-  path: string;
+  protocol?: string;
+  host?: string;
+  port?: number;
+  path?: string;
   source?: string;
   index?: string;
   https?: HTTPSOptions;
@@ -28,7 +28,7 @@ const defaultOptions: ILog2SplunkOptions = {
   protocol: 'https',
   host: 'localhost',
   port: 8088,
-  path: '/services/collector/event',
+  path: '/services/collector',
 };
 
 export default class Log2Splunk {
@@ -47,7 +47,7 @@ export default class Log2Splunk {
     };
 
     const opt: ExtendOptions = {
-      url: `${protocol}://${host}:${port}${path}`,
+      prefixUrl: `${protocol}://${host}:${port}${path}`,
       context: {
         token,
       },
@@ -107,13 +107,13 @@ export default class Log2Splunk {
   ): Promise<Response<T>> {
     const payload = this.getPayload(body, metadata);
 
-    return this.client.post<T>({
+    return this.client.post<T>('event', {
       json: payload,
     });
   }
 
   public async sendRaw(body: string): Promise<Response<string>> {
-    return this.client.post({
+    return this.client.post('raw', {
       body,
     });
   }
