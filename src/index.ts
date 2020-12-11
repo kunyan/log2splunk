@@ -37,10 +37,10 @@ const defaultOptions: ILog2SplunkOptions = {
   host: 'localhost',
   port: 8088,
   path: '/services/collector',
+  source: pkgJSON.name,
 };
 
 const defaultMetadata: IMetadata = {
-  source: pkgJSON.name,
   sourcetype: 'httpevent',
 };
 
