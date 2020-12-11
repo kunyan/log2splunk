@@ -38,3 +38,7 @@ logger.sendRaw("Hello World");
   await logger.send('Hello async/await');
 })();
 ```
+
+### Reference
+
+[HTTP Event Collector Examples](https://docs.splunk.com/Documentation/Splunk/8.1.0/Data/HECExamples)

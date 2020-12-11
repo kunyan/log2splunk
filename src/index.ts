@@ -1,4 +1,6 @@
 import got, { Response, HTTPSOptions, ExtendOptions } from 'got';
+import { v4 as uuidv4 } from 'uuid';
+import pkgJSON from '../package.json';
 
 export interface ILog2SplunkOptions {
   token?: string;
@@ -11,16 +13,22 @@ export interface ILog2SplunkOptions {
   https?: HTTPSOptions;
 }
 
-export interface IMetaData {
+/**
+ * @name Metadata
+ * @description
+ * @doc
+ */
+export interface IMetadata {
   time?: number;
   host?: string;
   source?: string;
   sourcetype?: string;
   index?: string;
-  fields?: Record<string, unknown>;
+  // https://docs.splunk.com/Documentation/Splunk/8.1.0/Data/IFXandHEC
+  fields?: Record<string, string | string[]>;
 }
 
-interface IPayload extends IMetaData {
+interface IPayload extends IMetadata {
   event?: string | Record<string, unknown>;
 }
 
@@ -31,9 +39,14 @@ const defaultOptions: ILog2SplunkOptions = {
   path: '/services/collector',
 };
 
+const defaultMetadata: IMetadata = {
+  source: pkgJSON.name,
+  sourcetype: 'httpevent',
+};
+
 export default class Log2Splunk {
   private client;
-  private metaData: IMetaData;
+  private metaData: IMetadata;
 
   constructor(options: Partial<ILog2SplunkOptions> = defaultOptions) {
     const { protocol, host, port, path, token, https, source, index } = {
@@ -42,6 +55,7 @@ export default class Log2Splunk {
     };
 
     this.metaData = {
+      ...defaultMetadata,
       source,
       index,
     };
@@ -52,7 +66,7 @@ export default class Log2Splunk {
         token,
       },
       headers: {
-        'user-agent': `log2splunk`,
+        'user-agent': `${pkgJSON.name}/${pkgJSON.version} (${pkgJSON.homepage})`,
         authorization: `Splunk ${token}`,
       },
       responseType: 'json',
@@ -77,20 +91,14 @@ export default class Log2Splunk {
 
   private getPayload(
     body: string | Record<string, unknown>,
-    metadata?: IMetaData
+    metadata?: IMetadata
   ): IPayload {
     const payload: IPayload = {
       ...this.metaData,
       time: Math.floor(new Date().getTime() / 1000),
+      event: body,
     };
 
-    if (typeof body === 'string') {
-      payload.event = body;
-      payload.sourcetype = '_raw';
-    } else {
-      payload.fields = body;
-      payload.sourcetype = '_json';
-    }
     if (metadata) {
       return {
         ...payload,
@@ -103,7 +111,7 @@ export default class Log2Splunk {
 
   public async send<T>(
     body: string | Record<string, unknown>,
-    metadata?: IMetaData
+    metadata?: IMetadata
   ): Promise<Response<T>> {
     const payload = this.getPayload(body, metadata);
 
@@ -115,6 +123,9 @@ export default class Log2Splunk {
   public async sendRaw(body: string): Promise<Response<string>> {
     return this.client.post('raw', {
       body,
+      headers: {
+        'X-Splunk-Request-Channel': uuidv4(),
+      },
     });
   }
 }

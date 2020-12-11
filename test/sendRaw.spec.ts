@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { HTTPError } from 'got';
 import nock from 'nock';
 import Log2Splunk from '../src';
 
@@ -15,6 +14,7 @@ describe('sendRaw', () => {
     nock('https://splunk-hec.example.com:8088', {
       reqheaders: {
         authorization: 'Splunk aaaa',
+        'X-Splunk-Request-Channel': /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
       },
     })
       .post('/services/collector/raw', (body) => (reqBody = body))
