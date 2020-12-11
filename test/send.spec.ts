@@ -27,7 +27,6 @@ describe('send', () => {
 
     expect(reqBody).to.deep.contains({
       event: 'Hello world',
-      sourcetype: '_raw',
     });
 
     expect(result.statusCode).to.eq(200);
@@ -59,12 +58,11 @@ describe('send', () => {
     );
 
     expect(reqBody).to.deep.contains({
-      fields: {
+      event: {
         message: 'Hello world',
         severity: 'info',
       },
       source: 'unit test',
-      sourcetype: '_json',
     });
     expect(result.statusCode).to.eq(200);
     expect(result.body).to.deep.equal({ text: 'Success', code: 0 });
