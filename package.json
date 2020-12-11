@@ -72,13 +72,12 @@
     "require": "ts-node/register"
   },
   "nyc": {
-    "extension": [
-      "ts"
+    "include": [
+      "src"
     ],
     "exclude": [
       "**/*.d.ts"
     ],
-    "reporter": "lcov",
-    "all": true
+    "reporter": "lcov"
   }
 }

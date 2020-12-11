@@ -63,6 +63,7 @@ describe('send', () => {
         severity: 'info',
       },
       source: 'unit test',
+      sourcetype: 'httpevent',
     });
     expect(result.statusCode).to.eq(200);
     expect(result.body).to.deep.equal({ text: 'Success', code: 0 });

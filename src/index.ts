@@ -1,5 +1,6 @@
 import got, { Response, HTTPSOptions, ExtendOptions } from 'got';
 import { v4 as uuidv4 } from 'uuid';
+import pkgJSON from '../package.json';
 
 export interface ILog2SplunkOptions {
   token?: string;
@@ -38,6 +39,11 @@ const defaultOptions: ILog2SplunkOptions = {
   path: '/services/collector',
 };
 
+const defaultMetadata: IMetadata = {
+  source: pkgJSON.name,
+  sourcetype: 'httpevent',
+};
+
 export default class Log2Splunk {
   private client;
   private metaData: IMetadata;
@@ -49,6 +55,7 @@ export default class Log2Splunk {
     };
 
     this.metaData = {
+      ...defaultMetadata,
       source,
       index,
     };
@@ -59,7 +66,7 @@ export default class Log2Splunk {
         token,
       },
       headers: {
-        'user-agent': `log2splunk`,
+        'user-agent': `${pkgJSON.name}/${pkgJSON.version} (${pkgJSON.homepage})`,
         authorization: `Splunk ${token}`,
       },
       responseType: 'json',
