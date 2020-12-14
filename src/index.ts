@@ -1,6 +1,8 @@
 import got, { Response, HTTPSOptions, ExtendOptions } from 'got';
 import { v4 as uuidv4 } from 'uuid';
-import pkgJSON from '../package.json';
+
+// eslint-disable-next-line
+const pkgJSON = require('../package.json');
 
 export interface ILog2SplunkOptions {
   token?: string;
